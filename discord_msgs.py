@@ -16,5 +16,4 @@ def send_msg(webhookurl, message="@here Your info is here!", *, embed=None, bot_
     except requests.exceptions.HTTPError as err:
         print(err)
     else:
-        # print("Payload delivered successfully, code {}.".format(result.status_code))
         pass
