@@ -7,8 +7,7 @@ class PepperSpider(scrapy.Spider):
     start_urls = ['https://www.pepper.pl/grupa/gry-bez-pradu']
 
     def parse(self, response):
-        grid = response.css('#toc-target-deals')
-        for promo_block in grid.css('div.gridLayout-item'):
+        for promo_block in response.css('#toc-target-deals article'):
             promo_id = promo_block.css('article::attr(id)').get()
             price = promo_block.css('span.thread-price::text').get()
             if price is not None:
@@ -22,7 +21,6 @@ class PepperSpider(scrapy.Spider):
             if short_descr is not None:
                 short_descr = short_descr.strip()
             #time = promo_block.css('span.hide--toBigCards1::text').re(r'(([0-9]*) g, )?([0-9]* min)?')
-
             if promo_id is not None:
                 yield {
                     'promo_id': promo_id,
