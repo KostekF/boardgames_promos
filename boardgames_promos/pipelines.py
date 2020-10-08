@@ -16,6 +16,10 @@ class DiscordSenderPipeline:
         self.first_run = False
         self.promo_dict = {}
         self.filename = './promos_scraped.jl'
+        if os.environ.get('DSC_WEBHOOK') is None:
+            self.dsc_webhook = config.dsc_webhook
+        else:
+            self.dsc_webhook = os.environ.get('DSC_WEBHOOK')
 
     def open_spider(self, spider):
         if not os.path.isfile(self.filename):
@@ -30,6 +34,7 @@ class DiscordSenderPipeline:
             with jsonlines.open('promos_scraped.jl', mode='a') as writer:
                 for promo in self.promo_dicts:
                     writer.write(promo)
+        dsc.send_msg(self.dsc_webhook, 'test') #TODO: DELETE LATER
 
     def process_item(self, item, spider):
         self.send_promo = True
@@ -44,7 +49,7 @@ class DiscordSenderPipeline:
         if self.send_promo:
             self.promo_dicts.append(self.promo_dict)
             if not self.first_run:
-                dsc.send_promo_msg(config.dsc_webhook, self.promo_dict)
+                dsc.send_promo_msg(self.dsc_webhook, self.promo_dict)
 
         return item
 
