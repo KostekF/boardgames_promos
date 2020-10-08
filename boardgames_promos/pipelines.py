@@ -5,7 +5,6 @@ import logging
 from itemadapter import ItemAdapter
 
 import discord_msgs as dsc
-import config
 
 
 class DiscordSenderPipeline:
@@ -17,6 +16,7 @@ class DiscordSenderPipeline:
         self.promo_dict = {}
         self.filename = './promos_scraped.jl'
         if os.environ.get('DSC_WEBHOOK') is None:
+            import config
             self.dsc_webhook = config.dsc_webhook
         else:
             self.dsc_webhook = os.environ.get('DSC_WEBHOOK')
