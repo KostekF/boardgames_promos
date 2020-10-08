@@ -34,7 +34,6 @@ class DiscordSenderPipeline:
             with jsonlines.open('promos_scraped.jl', mode='a') as writer:
                 for promo in self.promo_dicts:
                     writer.write(promo)
-        dsc.send_msg(self.dsc_webhook, 'test') #TODO: DELETE LATER
 
     def process_item(self, item, spider):
         self.send_promo = True
