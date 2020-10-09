@@ -11,7 +11,7 @@ class DiscordSenderPipeline:
     promo_dicts = []
 
     def __init__(self):
-        self.send_promo = False
+        self.save_promo_to_file = False
         self.first_run = False
         self.promo_dict = {}
         self.filename = './promos_scraped.jl'
@@ -30,22 +30,23 @@ class DiscordSenderPipeline:
             self.first_run = True
 
     def close_spider(self, spider):
-        if self.send_promo:
+        if self.save_promo_to_file:
             with jsonlines.open('promos_scraped.jl', mode='a') as writer:
                 for promo in self.promo_dicts:
                     writer.write(promo)
 
     def process_item(self, item, spider):
-        self.send_promo = True
+        send_promo = True
         self.promo_dict = ItemAdapter(item).asdict()
 
         #if promo was scraped before discard it
         with jsonlines.open('promos_scraped.jl') as reader:
             for obj in reader:
                 if self.promo_dict['promo_id'] == obj['promo_id']:
-                    self.send_promo = False
+                    send_promo = False
 
-        if self.send_promo:
+        if send_promo:
+            self.save_promo_to_file = True
             self.promo_dicts.append(self.promo_dict)
             if not self.first_run:
                 dsc.send_promo_msg(self.dsc_webhook, self.promo_dict)
