@@ -1,10 +1,14 @@
+import os
 import scrapy
 
 
 class PepperSpider(scrapy.Spider):
     name = 'pepper_promos'
 
-    start_urls = ['https://www.pepper.pl/grupa/gry-bez-pradu']
+    if os.environ.get('PEPPER_ADDR') is None:
+        start_urls = ['https://www.pepper.pl/grupa/gry-bez-pradu']
+    else:
+        start_urls = [os.environ.get('PEPPER_ADDR')]
 
     def parse(self, response):
         for promo_block in response.css('#toc-target-deals article'):
