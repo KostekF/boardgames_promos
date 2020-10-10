@@ -11,7 +11,7 @@ if __name__ == "__main__":
     if os.environ.get('INTERVAL_SECS') is None:
         interval_secs = 20
     else:
-        interval_secs = os.environ.get('INTERVAL_SECS')
+        interval_secs = int(os.environ.get('INTERVAL_SECS'))
     scheduler.add_job(process.crawl, 'interval', args=['pepper_promos'], seconds=interval_secs)
     scheduler.start()
     process.start(False)
