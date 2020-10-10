@@ -8,13 +8,14 @@ import discord_msgs as dsc
 
 
 class DiscordSenderPipeline:
-    promo_dicts = []
 
     def __init__(self):
         self.save_promo_to_file = False
         self.first_run = False
+        self.promo_dicts = []
         self.promo_dict = {}
         self.filename = './promos_scraped.jl'
+
         if os.environ.get('DSC_WEBHOOK') is None:
             import config
             self.dsc_webhook = config.dsc_webhook
