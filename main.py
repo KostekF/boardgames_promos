@@ -13,6 +13,7 @@ if __name__ == "__main__":
     else:
         interval_secs = int(os.environ.get('INTERVAL_SECS'))
     scheduler.add_job(process.crawl, 'interval', args=['pepper_promos'], seconds=interval_secs)
+    scheduler.add_job(process.crawl, 'interval', args=['lowcygier_promos'], seconds=interval_secs)
     scheduler.start()
     process.start(False)
 
