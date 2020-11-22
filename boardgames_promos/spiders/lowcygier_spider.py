@@ -12,7 +12,9 @@ class PepperSpider(scrapy.Spider):
 
     def parse(self, response):
         for promo_block in response.css('main article'):
-            promo_id = 'PROMO-' + promo_block.css('time.timeago::attr(datetime)').get()
+            promo_id = promo_block.css('time.timeago::attr(datetime)').get()
+            if promo_id is not None:
+                promo_id = 'LOWCY-' + promo_id
             price = promo_block.css('h2.post-title a::text').re_first(
                 r'[0-9]+(?:,[0-9]+)?\040?zł')
             if price is not None:

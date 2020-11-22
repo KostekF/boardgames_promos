@@ -13,6 +13,8 @@ class PepperSpider(scrapy.Spider):
     def parse(self, response):
         for promo_block in response.css('#toc-target-deals article'):
             promo_id = promo_block.css('article::attr(id)').get()
+            if promo_id is not None:
+                promo_id = 'PEPPER-' + promo_id
             price = promo_block.css('span.thread-price::text').get()
             if price is not None:
                 price = price.strip()
